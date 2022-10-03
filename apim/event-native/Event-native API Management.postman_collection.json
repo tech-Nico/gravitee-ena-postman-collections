@@ -1,0 +1,2321 @@
+{
+	"info": {
+		"_postman_id": "b57846fc-fbb9-4a79-be43-97d0f24a45c3",
+		"name": "Event-native API Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4217580"
+	},
+	"item": [
+		{
+			"name": "01 - Data Ingestion (HTTP Post)",
+			"item": [
+				{
+					"name": "Post Requests",
+					"item": [
+						{
+							"name": "Post data",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"parameter\": \"valuea\",\n    \"feature\": \"cloud2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/data/ingestion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"data",
+										"ingestion"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Data Ingestion to Kafka\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Data Ingestion to Kafka\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/data/ingestions2\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"http-post\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"enabled\": false\n                        },\n                        \"producer\": {\n                            \"enabled\": true\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create keyless plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish plan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans",
+								"{{plan}}",
+								"_publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start API",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "02 - Event Consumption - SSE",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - SSE\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - SSE\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/demo/sse\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\": \"demo\",\n                        \"consumer\": {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\": {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create keyless plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish plan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans",
+								"{{plan}}",
+								"_publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start API",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "03 - Event Consumption - Websocket",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - Websocket\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Websocket\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/demo/ws\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"websocket\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\", \n                        \"topics\" : \"demo\",\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                        }\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create keyless plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish plan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans",
+								"{{plan}}",
+								"_publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start API",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "04 - Event Consumption - Webhook",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - Webhook\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : \"demo\",\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create subscription plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish subscription plan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans",
+								"{{plan}}",
+								"_publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start api",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"72719d3b-0f28-4c09-b19d-3b0f286c090f\",\n    \"name\": \"apiv4\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"apiv4\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/test-jupiter-v4/\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfig\": false\n                }\n            ]\n        }\n    ],\n    \"visibility\": \"PRIVATE\",\n    \"state\": \"STARTED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}?action=start",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deploy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/deploy",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"deploy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo'}\",\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/891490b9-1e37-4b5e-8f91-4d40b9187710\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo2'}\",\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/edc6080f-2094-4ce2-ae4c-068780a47584\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "05 - Event Consumption - Webhook - Message Filtering",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - Webhook - Subscription Filtering\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook - Subscription Filtering\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : \"demo\",\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [\n                {\n                    \"name\": \"Message filtering\",\n                    \"description\": \"Apply filter to messages\",\n                    \"enabled\": true,\n                    \"policy\": \"message-filtering\",\n                    \"configuration\": {\n                        \"filter\": \"{#subscription.filter}\"\n                    }\n                }\n            ],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create subscription plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish subscription plan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans",
+								"{{plan}}",
+								"_publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start api",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"72719d3b-0f28-4c09-b19d-3b0f286c090f\",\n    \"name\": \"apiv4\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"apiv4\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/test-jupiter-v4/\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfig\": false\n                }\n            ]\n        }\n    ],\n    \"visibility\": \"PRIVATE\",\n    \"state\": \"STARTED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}?action=start",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deploy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/deploy",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"deploy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo'}\",\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/891490b9-1e37-4b5e-8f91-4d40b9187710\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo2'}\",\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/edc6080f-2094-4ce2-ae4c-068780a47584\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "06 - Event Consumption - Webhook - Cloud-Events",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - Webhook - Cloud Events\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook - Cloud Events\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : \"demo\",\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [\n                {\n                    \"name\": \"Cloud Events\",\n                    \"description\": \"Transform to cloud-events message\",\n                    \"enabled\": true,\n                    \"policy\": \"cloud-events\",\n                    \"configuration\": {\n                        \"type\": \"demo-events\",\n                        \"id\": \"{#message.metadata['key']}\",\n                        \"source\": \"kafka://{#message.metadata['topic']}/{#message.metadata['partition']}/{#message.metadata['offset']}\"\n                    }\n                }\n            ],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create subscription plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish subscription plan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans",
+								"{{plan}}",
+								"_publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start api",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"72719d3b-0f28-4c09-b19d-3b0f286c090f\",\n    \"name\": \"apiv4\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"apiv4\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/test-jupiter-v4/\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfig\": false\n                }\n            ]\n        }\n    ],\n    \"visibility\": \"PRIVATE\",\n    \"state\": \"STARTED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}?action=start",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deploy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/deploy",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"deploy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'cloud2'}\",\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/47ab67ee-301f-4a5c-9432-e69789d97d7f\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
