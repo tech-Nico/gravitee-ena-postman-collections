@@ -868,12 +868,12 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "96661552-4d71-4573-86cc-08ad058fc2c0",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);",
 									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
 								],
-								"type": "text/javascript",
-								"id": "96661552-4d71-4573-86cc-08ad058fc2c0"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -900,7 +900,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Event Consumption - Webhook - Subscription Filtering\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook - Subscription Filtering\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\",\n                    \"configuration\": {\n                        \"callbackUrl\": \"https://webhook.site/86195609-6ffe-4fda-8011-b8b8f91aa54b\"\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [\n                {\n                    \"name\": \"Message filtering\",\n                    \"description\": \"Apply filter to messages\",\n                    \"enabled\": true,\n                    \"policy\": \"message-filtering\",\n                    \"configuration\": {\n                        \"filter\": \"{#subscription.filter}\"\n                    }\n                }\n            ],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"raw": "{\n    \"name\": \"Event Consumption - Webhook - Subscription Filtering\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook - Subscription Filtering\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [\n                {\n                    \"name\": \"Message filtering\",\n                    \"description\": \"Apply filter to messages\",\n                    \"enabled\": true,\n                    \"policy\": \"message-filtering\",\n                    \"configuration\": {\n                        \"filter\": \"{#subscription.filter}\"\n                    }\n                }\n            ],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
