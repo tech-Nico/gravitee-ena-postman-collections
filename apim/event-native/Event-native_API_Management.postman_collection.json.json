@@ -1,0 +1,1821 @@
+{
+	"info": {
+		"_postman_id": "721150bc-c497-4b1c-8f40-cba961c861ea",
+		"name": "Event-native API Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "01 - Data Ingestion (HTTP Post)",
+			"item": [
+				{
+					"name": "Post Requests",
+					"item": [
+						{
+							"name": "Post data",
+							"_postman_id": "68dd2c3b-8194-4118-9a85-52fc0e8d5880",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"parameter\": \"valuea\",\n    \"feature\": \"cloud2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8082/data/ingestion"
+							},
+							"response": []
+						}
+					],
+					"_postman_id": "7f6567ff-6126-45c2-88b0-4c5cc0283b52",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "afc23d31-7e37-446d-b50d-4012cf6f8f6a"
+							}
+						}
+					],
+					"_postman_id": "720d4716-056f-4dfd-9c64-485727852008",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Data Ingestion to Kafka\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Data Ingestion to Kafka\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/data/ingestion\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"http-post\",\n                    \"configuration\": {\n                        \"requestHeadersToMessage\": false\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"enabled\": false\n                        },\n                        \"producer\": {\n                            \"enabled\": true\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create keyless plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "7dd287fc-d9c8-4fa5-a28a-9c9fda5f7589"
+							}
+						}
+					],
+					"_postman_id": "b12a3ac1-d4d3-4e1f-bc64-ed69b79ca61c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Publish plan",
+					"_postman_id": "19713310-453f-4c70-b202-f141a61458c7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish"
+					},
+					"response": []
+				},
+				{
+					"name": "Start API",
+					"_postman_id": "56b6b0df-e237-4e5f-910a-8250d4c0a18f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "8be4debf-56aa-4bb5-9380-42f4b5a35ba7"
+		},
+		{
+			"name": "02 - Event Consumption - SSE",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "0014bf4e-17e7-4f8f-96ba-cdd0f89160cc"
+							}
+						}
+					],
+					"_postman_id": "31d330b9-7e07-4b9b-bada-8e055ec6145c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - SSE\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - SSE\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/demo/sse\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\",\n                    \"configuration\": {\n                        \"heartbeatIntervalInMs\": 5000,\n                        \"metadataAsComment\": false,\n                        \"headersAsComment\": false\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\": [\"demo\"],\n                        \"consumer\": {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\": {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create keyless plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "e4cdb075-2ccb-4367-9c52-ee6a9bdac256"
+							}
+						}
+					],
+					"_postman_id": "d5418f24-58cd-4069-8b03-67f1342a270d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Publish plan",
+					"_postman_id": "7deea4c1-0f1a-46f4-b052-0d1fd0b23030",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish"
+					},
+					"response": []
+				},
+				{
+					"name": "Start API",
+					"_postman_id": "c41f9090-95df-442e-b4b4-ccc6b22518fe",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "26573e47-3e2a-490a-828d-be0492d55eb7"
+		},
+		{
+			"name": "03 - Event Consumption - Websocket",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "b5ecce4e-e190-4900-bec4-50ddb1b13332"
+							}
+						}
+					],
+					"_postman_id": "885c6e62-8676-4446-aa7a-5444f656044c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - Websocket\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Websocket\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/demo/ws\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"websocket\",\n                    \"configuration\": {\n                        \"publisher\": {\n                            \"enabled\": true\n                        },\n                        \"subscriber\": {\n                            \"enabled\": true\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\", \n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"enabled\": true,\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create keyless plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "af013326-3ec8-4f7d-b637-145d4b92757a"
+							}
+						}
+					],
+					"_postman_id": "6593e770-2ff1-4430-8ffa-ecb90ff4baf7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Publish plan",
+					"_postman_id": "f02076fc-2893-4ddd-a0d6-9d1d8e0af381",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish"
+					},
+					"response": []
+				},
+				{
+					"name": "Start API",
+					"_postman_id": "b20141c7-a747-4ae8-878f-ea5b7c3a9901",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "a96e345f-9f98-4c29-a8d7-d80b347f8f77"
+		},
+		{
+			"name": "04 - Event Consumption - Webhook",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "8e80d937-e61b-4a0c-a779-2681cd875248"
+							}
+						}
+					],
+					"_postman_id": "9145742f-c978-4b70-8815-821deaef920c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - Webhook\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\",\n                    \"configuration\": {\n                        \"callbackUrl\": \"https://webhook.site/86195609-6ffe-4fda-8011-b8b8f91aa54b\"\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create subscription plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "700d01df-7a52-4e7d-81b9-7ef29fa75e36"
+							}
+						}
+					],
+					"_postman_id": "802396ba-fd1b-44ac-9e3e-8fcba478d27b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Publish subscription plan",
+					"_postman_id": "e2c7e57a-edf7-4d3a-a0ff-b15ad0a86db6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish"
+					},
+					"response": []
+				},
+				{
+					"name": "Start api",
+					"_postman_id": "860526ea-52ae-417b-8836-93adbbc41142",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"72719d3b-0f28-4c09-b19d-3b0f286c090f\",\n    \"name\": \"apiv4\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"apiv4\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/test-jupiter-v4/\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfig\": false\n                }\n            ]\n        }\n    ],\n    \"visibility\": \"PRIVATE\",\n    \"state\": \"STARTED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}?action=start",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deploy",
+					"_postman_id": "d6b09692-6205-45bb-a1d5-06fc20ca7acd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/deploy"
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "f8f2a1ac-5c76-4083-8b30-145498c02fa6"
+							}
+						}
+					],
+					"_postman_id": "55cb7dbd-3b2d-424d-888c-8d5ab7f97e8c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications"
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "ab17eba4-cf6c-4dd6-b7f7-5e0f3f9115a2"
+							}
+						}
+					],
+					"_postman_id": "db410a1c-8d55-44c6-8c2b-5ca8af7a34f7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/3a6f5e37-f10f-4730-9ce3-72787faa8711\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "6fb267f5-0104-4a0d-aa27-c6fb0dec903f"
+		},
+		{
+			"name": "05 - Event Consumption - Webhook - Message Filtering",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "96661552-4d71-4573-86cc-08ad058fc2c0"
+							}
+						}
+					],
+					"_postman_id": "4d00bbde-5c71-4cb9-8966-e97e513d4fe3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - Webhook - Subscription Filtering\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook - Subscription Filtering\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\",\n                    \"configuration\": {\n                        \"callbackUrl\": \"https://webhook.site/86195609-6ffe-4fda-8011-b8b8f91aa54b\"\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [\n                {\n                    \"name\": \"Message filtering\",\n                    \"description\": \"Apply filter to messages\",\n                    \"enabled\": true,\n                    \"policy\": \"message-filtering\",\n                    \"configuration\": {\n                        \"filter\": \"{#subscription.filter}\"\n                    }\n                }\n            ],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create subscription plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "d94f9dad-7b8d-4d75-91f0-cfd4191f8e4d"
+							}
+						}
+					],
+					"_postman_id": "15d20aca-1d75-4d6d-9b54-f34ea3905018",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Publish subscription plan",
+					"_postman_id": "29a91a55-0408-4489-b89d-b0a43cab9dde",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish"
+					},
+					"response": []
+				},
+				{
+					"name": "Start api",
+					"_postman_id": "9d9f9811-8030-4b16-857f-31f3cf6cb2a1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"72719d3b-0f28-4c09-b19d-3b0f286c090f\",\n    \"name\": \"apiv4\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"apiv4\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/test-jupiter-v4/\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfig\": false\n                }\n            ]\n        }\n    ],\n    \"visibility\": \"PRIVATE\",\n    \"state\": \"STARTED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}?action=start",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deploy",
+					"_postman_id": "a8b4daf6-f482-4c30-acbf-e7f0312f77da",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/deploy"
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "908f94d1-73de-4aba-80e2-83577e938240"
+							}
+						}
+					],
+					"_postman_id": "79723cb2-5fd6-4411-959b-824658e323e9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications"
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "cbf6688b-1c93-4d52-973b-c3b4d41155db"
+							}
+						}
+					],
+					"_postman_id": "13e588d5-d05e-475e-b1eb-01dd22398110",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo'}\",\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/891490b9-1e37-4b5e-8f91-4d40b9187710\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "83d744b0-135f-4e05-84f3-1baa8e17cd7f"
+							}
+						}
+					],
+					"_postman_id": "4f926e67-badc-47a0-9573-2f483206e1e1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications"
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "f15a34ee-5358-4a30-bb84-ececc0fcab57"
+							}
+						}
+					],
+					"_postman_id": "85572862-fa54-45cf-b3a2-6e1b4760b9e9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo2'}\",\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/edc6080f-2094-4ce2-ae4c-068780a47584\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "49936a11-06fc-4c4e-a25e-3436a3ecd283"
+		},
+		{
+			"name": "06 - Event Consumption - Webhook - Cloud-Events",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "88eece61-7c84-46fb-8091-e697e478c9ae"
+							}
+						}
+					],
+					"_postman_id": "87643152-068d-4ebb-8c0b-3454cfd9851f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - Webhook - Cloud Events\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook - Cloud Events\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\",\n                    \"configuration\": {\n                        \"callbackUrl\": \"https://webhook.site/86195609-6ffe-4fda-8011-b8b8f91aa54b\"\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [\n                {\n                    \"name\": \"Cloud Events\",\n                    \"description\": \"Transform to cloud-events message\",\n                    \"enabled\": true,\n                    \"policy\": \"cloud-events\",\n                    \"configuration\": {\n                        \"type\": \"demo-events\",\n                        \"id\": \"{#message.metadata['key']}\",\n                        \"source\": \"kafka://{#message.metadata['topic']}/{#message.metadata['partition']}/{#message.metadata['offset']}\"\n                    }\n                }\n            ],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create subscription plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "0a5535f1-9076-4c69-aa02-240ff5899167"
+							}
+						}
+					],
+					"_postman_id": "1be3503c-2991-49b3-a9d9-b2b2080d3574",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Publish subscription plan",
+					"_postman_id": "73caec13-f6d6-4435-8556-d886a55b5945",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish"
+					},
+					"response": []
+				},
+				{
+					"name": "Start api",
+					"_postman_id": "a118ab0f-be7d-4d32-a345-2523a97f191a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"72719d3b-0f28-4c09-b19d-3b0f286c090f\",\n    \"name\": \"apiv4\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"apiv4\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/test-jupiter-v4/\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfig\": false\n                }\n            ]\n        }\n    ],\n    \"visibility\": \"PRIVATE\",\n    \"state\": \"STARTED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}?action=start",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deploy",
+					"_postman_id": "c303dc7b-1af4-48d1-9deb-e8fca3472aae",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/deploy"
+					},
+					"response": []
+				},
+				{
+					"name": "Create an application 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"application\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "1d7f7fe7-41e0-4d10-bd7f-36cec96f6787"
+							}
+						}
+					],
+					"_postman_id": "46d82448-5656-4112-bd1b-9d5a044eaccd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"application\",\n    \"description\":\"application\",\n    \"settings\":\n    {\n        \"app\":\n            {   \n                \"type\":\"test\"}\n            }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/applications"
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to API - 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "86e9801c-f4fc-453a-a298-521be6e43928"
+							}
+						}
+					],
+					"_postman_id": "9a643350-5858-4449-8814-652c0bb2f92b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"configuration\": {\n        \"type\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/3a6f5e37-f10f-4730-9ce3-72787faa8711\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions?application={{application}}&plan={{plan}}",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "application",
+									"value": "{{application}}"
+								},
+								{
+									"key": "plan",
+									"value": "{{plan}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "50d907ba-56f5-429d-be66-aab984527a5b"
+		},
+		{
+			"name": "07 - Event Consumption - HTTP-GET",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "dcd36691-dee8-4179-970a-671b84e06453"
+							}
+						}
+					],
+					"_postman_id": "ee1bbdee-632b-4fe1-8d7d-e8f3ab0f11c7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - HTTP - GET\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - HTTP - GET\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/demo/http-get\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"http-get\",\n                    \"configuration\": {\n                        \"messagesLimitCount\": 500,\n                        \"messagesLimitDurationMs\": 5000,\n                        \"headersInPayload\": false,\n                        \"metadataInPayload\": false\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\": [\"demo\"],\n                        \"consumer\": {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\": {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create keyless plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"id": "4b7dcebf-7cfc-402c-8190-c04a01cf00f2"
+							}
+						}
+					],
+					"_postman_id": "f62b5286-b8ab-4c0d-b1bf-5b867d19c53e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Publish plan",
+					"_postman_id": "dce20c6a-37b4-422e-b43b-3ce8934148d0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish"
+					},
+					"response": []
+				},
+				{
+					"name": "Start API",
+					"_postman_id": "874039b7-f0f2-4adf-82db-7bce4e50dbf2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "{{management_password}}",
+								"username": "{{management_username}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "93585c51-7a0b-4cf9-bd80-ee1507b2a7b3"
+		}
+	]
+}
