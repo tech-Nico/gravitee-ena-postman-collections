@@ -1997,7 +1997,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": {\n            \"demoHeader\": \"my-value\",\n            \"anotherHeader\": \"my-value-2\"\n        }\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2441,7 +2441,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo'}\",\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": {\n            \"demoHeader\": \"my-value\",\n            \"anotherHeader\": \"my-value-2\"\n        }\n    }\n}",
+									"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo'}\",\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2570,7 +2570,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo2'}\",\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": {\n            \"demoHeader\": \"my-value\",\n            \"anotherHeader\": \"my-value-2\"\n        }\n    }\n}",
+									"raw": "{\n    \"filter\": \"{#jsonPath(#message.content, '$.feature') == 'demo2'}\",\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3014,7 +3014,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": {\n            \"demoHeader\": \"my-value\",\n            \"anotherHeader\": \"my-value-2\"\n        }\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
