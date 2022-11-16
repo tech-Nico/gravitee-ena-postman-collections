@@ -1,0 +1,9 @@
+!.gitignore
+
+build/
+target/
+*.class
+.idea/
+.DS_Store
+*.iml
+**/.vscode
