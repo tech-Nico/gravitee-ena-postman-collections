@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "c2f2d06d-c7db-4d62-8e86-e402a20c180b",
-		"name": "Event-native API Management",
+		"_postman_id": "d9332570-4a25-43b2-b719-d69d11825516",
+		"name": "V4 API Management",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20391457"
+		"_exporter_id": "9828377"
 	},
 	"item": [
 		{
@@ -4923,6 +4923,227 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"name\": \"Event Consumption - HTTP - GET\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - HTTP - GET\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/demo/http-get\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"http-get\",\n                    \"configuration\": {\n                        \"messagesLimitCount\": 500,\n                        \"messagesLimitDurationMs\": 5000,\n                        \"headersInPayload\": false,\n                        \"metadataInPayload\": false\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\": [\"demo\"],\n                        \"consumer\": {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\": {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create keyless plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish plan",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								"plans",
+								"{{plan}}",
+								"_publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start API",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+							"host": [
+								"{{management_host}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"v4",
+								"apis",
+								"{{api}}",
+								""
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "start"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "06 - Http Consumption - HttpProxy",
+			"item": [
+				{
+					"name": "Create API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{management_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{management_username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Event Consumption - HTTP - GET\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"sync\",\n    \"description\": \"Event Consumption - HTTP - Proxy\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/demo/http-proxy\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"http-proxy\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"http-proxy\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"http-proxy\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"target\": \"https://api.gravitee.io/echo\"\n                    }\n                }\n            ]\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
