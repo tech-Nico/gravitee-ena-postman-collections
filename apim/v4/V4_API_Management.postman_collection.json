@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "788e07f3-823d-440f-8d65-776fcd3b1f1d",
+		"_postman_id": "7b3ee39f-37d1-436a-bc87-6d3de8fedca5",
 		"name": "V4 API Management",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20391457"
+		"_exporter_id": "13724285"
 	},
 	"item": [
 		{
@@ -3669,7 +3669,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Event Consumption - Webhook\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka-advanced\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka-advanced\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"pkc-6ojv2.us-west4.gcp.confluent.cloud:9092\",\n                        \"topics\": [\n                            \"testMessages\"\n                        ],\n                        \"security\": {\n                            \"protocol\": \"SASL_SSL\",\n                            \"sasl\": {\n                                \"saslMechanism\": \"PLAIN\",\n                                \"saslJaasConfig\": \"org.apache.kafka.common.security.plain.PlainLoginModule required username='HHT5V25S4MGFTAQR'   password='ejLcinopXtBi0+W0l0LDWUm23ARlxFRZhXjccB8tEHzSsGH0i9KaoA27MUXLDUkF';\"\n                            },\n                            \"ssl\": {\n                                \"trustStore\": {\n                                    \"type\": \"PKCS12\",\n                                    \"location\": \"/etc/ssl/certs/java/cacerts\",\n                                    \"password\": \"changeit\"\n                                }\n                            }\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+									"raw": "{\n    \"name\": \"Event Consumption - Webhook\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"description\": \"Event Consumption - Webhook\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4028,7 +4028,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"application\": \"{{application}}\",\n    \"plan\": \"{{plan}}\",\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://hooks.slack.com/services/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\"\n    }\n}",
+									"raw": "{\n    \"application\": \"{{application}}\",\n    \"plan\": \"{{plan}}\",\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4146,7 +4146,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://hooks.slack.com/services/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\"\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"demoValue\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"anotherValue\"\n            }\n        ]\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4233,7 +4233,193 @@
 							"response": []
 						},
 						{
-							"name": "Publisher - Pause subscription",
+							"name": "Publisher - Update API",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{management_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{management_username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{api}}\",\n    \"name\": \"Event Consumption - Webhook\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"deployedAt\": 1669384948542,\n    \"createdAt\": 1669384935062,\n    \"updatedAt\": 1669384948542,\n    \"description\": \"Event Consumption - Webhook\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\",\n                    \"qos\": \"auto\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"topics\" : [\"demo\"],\n                        \"consumer\" : {\n                            \"autoOffsetReset\": \"earliest\"\n                        },\n                        \"producer\" : {\n                            \"enabled\": false\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"plans\": [],\n    \"flowMode\": \"default\",\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"enabled\": true,\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": []\n        }\n    ],\n    \"groups\": [],\n    \"visibility\": \"PRIVATE\",\n    \"state\": \"STARTED\",\n    \"primaryOwner\": {\n        \"id\": \"1c8a99f9-dfd5-46b1-8a99-f9dfd5f6b16c\",\n        \"displayName\": \"admin\",\n        \"type\": \"USER\"\n    },\n    \"lifecycleState\": \"CREATED\",\n    \"disableMembershipNotifications\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}",
+									"host": [
+										"{{management_host}}"
+									],
+									"path": [
+										"management",
+										"organizations",
+										"DEFAULT",
+										"environments",
+										"DEFAULT",
+										"v4",
+										"apis",
+										"{{api}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Publisher - Redeploy api",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{management_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{management_username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "Auth-Graviteeio-APIM=Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ZjNjZjU2MS1lMTlhLTRlZDItYmNmNS02MWUxOWFhZWQyY2IiLCJwZXJtaXNzaW9ucyI6W3siYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifSx7ImF1dGhvcml0eSI6Ik9SR0FOSVpBVElPTjpBRE1JTiJ9LHsiYXV0aG9yaXR5IjoiT1JHQU5JWkFUSU9OOkFETUlOIn0seyJhdXRob3JpdHkiOiJPUkdBTklaQVRJT046VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6VVNFUiJ9LHsiYXV0aG9yaXR5IjoiRU5WSVJPTk1FTlQ6QURNSU4ifV0sImlzcyI6ImdyYXZpdGVlLW1hbmFnZW1lbnQtYXV0aCIsImV4cCI6MTY1ODc2MTQ2MiwiaWF0IjoxNjU4MTU2NjYyLCJqdGkiOiI4MWQ3NTgzNC0zM2UyLTRkZjctYWYxYy1lZGI4NWI3M2M3MTcifQ.3U_Ma27VwGH7bynfC8wgw4SbsSPQjEp0O93Xp-2XrCA; XSRF-TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJncmF2aXRlZS1tYW5hZ2VtZW50LWF1dGgiLCJpYXQiOjE2NTgxNTY3NjQsInRva2VuIjoiYmFlNjRkNGUtYjczYy00ZmQ3LTk0OTMtOTRkODZlZGIyZGQwIn0.66X2Gcvwrosm0HEJ1rB3IS46ySadc0IjKM29LIq2G3s",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/deploy",
+									"host": [
+										"{{management_host}}"
+									],
+									"path": [
+										"management",
+										"organizations",
+										"DEFAULT",
+										"environments",
+										"DEFAULT",
+										"v4",
+										"apis",
+										"{{api}}",
+										"deploy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consumer - STOP subscription",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{management_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{management_username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{portal_api_host}}/portal/environments/DEFAULT/subscriptions/{{subscription}}/_changeConsumerStatus?status=STOPPED",
+									"host": [
+										"{{portal_api_host}}"
+									],
+									"path": [
+										"portal",
+										"environments",
+										"DEFAULT",
+										"subscriptions",
+										"{{subscription}}",
+										"_changeConsumerStatus"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "STOPPED"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Publisher - PAUSE subscription",
 							"event": [
 								{
 									"listen": "test",
@@ -4295,6 +4481,138 @@
 										{
 											"key": "status",
 											"value": "PAUSED"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consumer - RESUME subscription",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{management_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{management_username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{portal_api_host}}/portal/environments/DEFAULT/subscriptions/{{subscription}}/_changeConsumerStatus?status=STARTED",
+									"host": [
+										"{{portal_api_host}}"
+									],
+									"path": [
+										"portal",
+										"environments",
+										"DEFAULT",
+										"subscriptions",
+										"{{subscription}}",
+										"_changeConsumerStatus"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "STARTED"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Publisher - RESUME subscription",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"subscription\", jsonData.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{management_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{management_username}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/subscriptions/{{subscription}}/status?status=RESUMED",
+									"host": [
+										"{{management_host}}"
+									],
+									"path": [
+										"management",
+										"organizations",
+										"DEFAULT",
+										"environments",
+										"DEFAULT",
+										"v4",
+										"apis",
+										"{{api}}",
+										"subscriptions",
+										"{{subscription}}",
+										"status"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "RESUMED"
 										}
 									]
 								}
