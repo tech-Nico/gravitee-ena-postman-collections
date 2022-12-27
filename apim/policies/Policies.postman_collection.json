@@ -1,0 +1,943 @@
+{
+	"info": {
+		"_postman_id": "17615486-88a7-4b69-83b4-ad4e35f5be28",
+		"name": "Policies",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14145626"
+	},
+	"item": [
+		{
+			"name": "Policies",
+			"item": [
+				{
+					"name": "Json to Json",
+					"item": [
+						{
+							"name": "V2 Api - V3 Engine",
+							"item": [
+								{
+									"name": "Create api v2-echo",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"postman.setEnvironmentVariable(\"api\", jsonData.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"json-2-json-v2-echo\",\n    \"name\": \"json-2-json-v2-echo\",\n    \"description\": \"json-2-json-v2-echo\",\n    \"version\": \"1.0.0\",\n    \"gravitee\": \"2.0.0\",\n    \"execution_mode\": \"v3\",\n    \"properties\": [\n        {\n            \"key\": \"my-prop\",\n            \"value\": \"my-value\",\n            \"encrypted\": false\n        }\n    ],\n    \"visibility\": \"PRIVATE\",\n    \"flow_mode\": \"DEFAULT\",\n    \"plans\": [],\n    \"proxy\": {\n        \"virtual_hosts\": [\n            {\n                \"path\": \"/json2json/v2-echo\"\n            }\n        ],\n        \"groups\": [\n            {\n                \"name\": \"default-group\",\n                \"endpoints\": [\n                    {\n                        \"backup\": false,\n                        \"inherit\": true,\n                        \"name\": \"default\",\n                        \"weight\": 1,\n                        \"type\": \"http\",\n                        \"target\": \"https://api.gravitee.io/echo\"\n                    }\n                ],\n                \"load_balancing\": {\n                    \"type\": \"ROUND_ROBIN\"\n                },\n                \"http\": {\n                    \"connectTimeout\": 5000,\n                    \"idleTimeout\": 60000,\n                    \"keepAlive\": true,\n                    \"readTimeout\": 10000,\n                    \"pipelining\": false,\n                    \"maxConcurrentConnections\": 100,\n                    \"useCompression\": true,\n                    \"followRedirects\": false\n                }\n            }\n        ]\n    },\n    \"flows\": [\n        {\n            \"name\": \"flow-1\",\n            \"methods\": [],\n            \"enabled\": true,\n            \"path-operator\": {\n                \"path\": \"/\",\n                \"operator\": \"STARTS_WITH\"\n            },\n            \"pre\": [\n                {\n                    \"name\": \"Json to Json\",\n                    \"description\": \"\",\n                    \"enabled\": true,\n                    \"policy\": \"json-to-json\",\n                    \"configuration\": {\n                        \"scope\": \"REQUEST\",\n                        \"specification\": \"[{ \\\"operation\\\": \\\"default\\\", \\\"spec\\\": { \\\"my-prop\\\": \\\"{#properties['my-prop']}\\\"}}]\"\n                    }\n                }\n            ],\n            \"post\": [\n                {\n                    \"name\": \"Json to Json\",\n                    \"description\": \"\",\n                    \"enabled\": true,\n                    \"policy\": \"json-to-json\",\n                    \"configuration\": {\n                        \"scope\": \"RESPONSE\",\n                        \"specification\": \"[{ \\\"operation\\\": \\\"default\\\", \\\"spec\\\": { \\\"my-prop\\\": \\\"{#properties['my-prop']}\\\"}}, {\\\"operation\\\": \\\"shift\\\", \\\"spec\\\": {\\\"query_params\\\": \\\"queryParams\\\", \\\"body\\\": \\\"requestBody\\\", \\\"headers\\\": \\\"headers\\\", \\\"method\\\": \\\"method\\\"}}]\"\n                    }\n                }\n            ]\n        }\n    ],\n    \"resources\": []\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/apis/import",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"apis",
+												"import"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"keyless\",\n    \"description\": \"Keyless\",\n    \"characteristics\": [],\n    \"security\": \"KEY_LESS\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/apis/{{api}}/plans",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"apis",
+												"{{api}}",
+												"plans"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Publish plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/apis/{{api}}/plans/{{plan}}/_publish",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"apis",
+												"{{api}}",
+												"plans",
+												"{{plan}}",
+												"_publish"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Publish api",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"deploymentLabel\": \"\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/apis/{{api}}/?action=start",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"apis",
+												"{{api}}",
+												""
+											],
+											"query": [
+												{
+													"key": "action",
+													"value": "start"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "V4 Sync Api",
+							"item": [
+								{
+									"name": "Create api v4-sync-echo",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"postman.setEnvironmentVariable(\"api\", jsonData.id);",
+													"pm.collectionVariables.set(\"apiEntity\", jsonData)"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"json-2-json-v4-sync\",\n    \"name\": \"json-2-json-v4-sync\",\n    \"description\": \"json-2-json-v4-sync\",\n    \"apiVersion\": \"1.0.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"sync\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/json2json/v4-sync\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"http-proxy\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"http-proxy\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"http-proxy\",\n                    \"configuration\": {\n                        \"target\": \"https://api.gravitee.io/echo\"\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"json-to-json\",\n            \"enabled\": true,\n            \"selectors\": [\n                {\n                    \"type\": \"http\",\n                    \"path\": \"/\",\n                    \"pathOperator\": \"STARTS_WITH\"\n                }\n            ],\n            \"request\": [\n                {\n                    \"name\": \"Json to Json\",\n                    \"description\": \"add an api properties in the request\",\n                    \"enabled\": true,\n                    \"policy\": \"json-to-json\",\n                    \"configuration\": {\n                        \"specification\": \"[{ \\\"operation\\\": \\\"default\\\", \\\"spec\\\": { \\\"static\\\": \\\"static-value\\\", \\\"my-prop\\\": \\\"{#api.properties['my-prop']}\\\"}}]\"\n                    }\n                }\n            ],\n            \"response\": [\n                {\n                    \"name\": \"Json to Json\",\n                    \"description\": \"rename response attributes\",\n                    \"enabled\": true,\n                    \"policy\": \"json-to-json\",\n                    \"configuration\": {\n                        \"scope\": \"RESPONSE\",\n                        \"specification\": \"[{\\\"operation\\\": \\\"shift\\\", \\\"spec\\\": {\\\"query_params\\\": \\\"queryParams\\\", \\\"body\\\": \\\"requestBody\\\", \\\"headers\\\": \\\"headers\\\", \\\"method\\\": \\\"method\\\"}}]\"\n                    }\n                }\n            ],\n            \"subscribe\": [],\n            \"publish\": []\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add properties",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"var apiEntity = pm.collectionVariables.get(\"apiEntity\")",
+													"",
+													"var body= {",
+													"    \"id\": `${apiEntity.id}`,",
+													"    \"name\": `${apiEntity.name}`,",
+													"    \"description\": `${apiEntity.description}`,",
+													"    \"apiVersion\": `${apiEntity.apiVersion}`,",
+													"    \"definitionVersion\": `${apiEntity.definitionVersion}`,",
+													"    \"type\": `${apiEntity.type}`,",
+													"    \"visibility\": `${apiEntity.visibility}`,",
+													"    \"properties\": [",
+													"        {",
+													"            \"key\": \"my-prop\",",
+													"            \"value\": \"my-value\",",
+													"            \"encrypted\": false",
+													"        }",
+													"    ],",
+													"    \"listeners\": apiEntity.listeners,",
+													"    \"endpointGroups\": apiEntity.endpointGroups,",
+													"    \"flows\": apiEntity.flows",
+													"}",
+													"",
+													"pm.collectionVariables.set(\"v4_sync_api_add_properties\", JSON.stringify(body))"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{{v4_sync_api_add_properties}}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												"{{api}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												"{{api}}",
+												"plans"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Publish plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												"{{api}}",
+												"plans",
+												"{{plan}}",
+												"_publish"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Publish api",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"deploymentLabel\": \"\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												"{{api}}",
+												""
+											],
+											"query": [
+												{
+													"key": "action",
+													"value": "start"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "V4 Async Api",
+							"item": [
+								{
+									"name": "Create api v4-async-sse-mock",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"postman.setEnvironmentVariable(\"api\", jsonData.id);",
+													"pm.collectionVariables.set(\"apiEntity\", jsonData)"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"json-2-json-v4-async\",\n    \"name\": \"json-2-json-v4-async\",\n    \"description\": \"json-2-json-v4-async\",\n    \"apiVersion\": \"1.0.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"async\",\n    \"listeners\": [\n        {\n            \"type\": \"http\",\n            \"paths\": [\n                {\n                    \"path\": \"/json2json/v4-async\"\n                }\n            ],\n            \"entrypoints\": [\n                {\n                    \"type\": \"sse\",\n                    \"configuration\": {\n                        \"heartbeatIntervalInMs\": 5000,\n                        \"metadataAsComment\": false,\n                        \"headersAsComment\": false\n                    }\n                },\n                {\n                    \"type\": \"http-post\",\n                    \"configuration\": {\n                        \"requestHeadersToMessage\": false\n                    }\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default\",\n            \"type\": \"mock\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"mock\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"messageInterval\": 1000,\n                        \"messageContent\": \"{ \\\"_id\\\": \\\"57762dc6ab7d620000000001\\\", \\\"name\\\": \\\"name\\\", \\\"__v\\\": 0 }\"\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"json-to-json\",\n            \"enabled\": true,\n            \"selectors\": [\n                {\n                    \"type\": \"channel\",\n                    \"operation\": [\"PUBLISH\", \"SUBSCRIBE\"],\n                    \"channel\": \"/\",\n                    \"channel-operator\": \"STARTS_WITH\"\n                }\n            ],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [\n                 {\n                    \"name\": \"Json to Json\",\n                    \"description\": \"rename _id and drop __v\",\n                    \"enabled\": true,\n                    \"policy\": \"json-to-json\",\n                    \"configuration\": {\n                        \"specification\": \"[{\\\"operation\\\": \\\"shift\\\",\\\"spec\\\": {\\\"_id\\\": \\\"id\\\",\\\"*\\\": {\\\"$\\\": \\\"&1\\\"}}},{\\\"operation\\\": \\\"remove\\\",\\\"spec\\\": {\\\"__v\\\": \\\"\\\"}}]\"\n                    }\n                }\n            ],\n            \"publish\": [\n                 {\n                    \"name\": \"Json to Json\",\n                    \"description\": \"add an api properties in the message\",\n                    \"enabled\": true,\n                    \"policy\": \"json-to-json\",\n                    \"configuration\": {\n                        \"specification\": \"[{ \\\"operation\\\": \\\"default\\\", \\\"spec\\\": { \\\"static\\\": \\\"static-value\\\", \\\"my-prop\\\": \\\"{#api.properties['my-prop']}\\\"}}]\"\n                    }\n                }\n            ]\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add properties",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"var apiEntity = pm.collectionVariables.get(\"apiEntity\")",
+													"",
+													"var body= {",
+													"    \"id\": `${apiEntity.id}`,",
+													"    \"name\": `${apiEntity.name}`,",
+													"    \"description\": `${apiEntity.description}`,",
+													"    \"apiVersion\": `${apiEntity.apiVersion}`,",
+													"    \"definitionVersion\": `${apiEntity.definitionVersion}`,",
+													"    \"type\": `${apiEntity.type}`,",
+													"    \"visibility\": `${apiEntity.visibility}`,",
+													"    \"properties\": [",
+													"        {",
+													"            \"key\": \"my-prop\",",
+													"            \"value\": \"my-value\",",
+													"            \"encrypted\": false",
+													"        }",
+													"    ],",
+													"    \"listeners\": apiEntity.listeners,",
+													"    \"endpointGroups\": apiEntity.endpointGroups,",
+													"    \"flows\": apiEntity.flows",
+													"}",
+													"",
+													"pm.collectionVariables.set(\"v4_sync_api_add_properties\", JSON.stringify(body))"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{{v4_sync_api_add_properties}}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												"{{api}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"postman.setEnvironmentVariable(\"plan\", jsonData.id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"Keyless\",\n    \"description\":\"Keyless\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"key-less\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												"{{api}}",
+												"plans"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Publish plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/plans/{{plan}}/_publish",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												"{{api}}",
+												"plans",
+												"{{plan}}",
+												"_publish"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Publish api",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{management_password}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{management_username}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"deploymentLabel\": \"\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{management_host}}/management/organizations/DEFAULT/environments/DEFAULT/v4/apis/{{api}}/?action=start",
+											"host": [
+												"{{management_host}}"
+											],
+											"path": [
+												"management",
+												"organizations",
+												"DEFAULT",
+												"environments",
+												"DEFAULT",
+												"v4",
+												"apis",
+												"{{api}}",
+												""
+											],
+											"query": [
+												{
+													"key": "action",
+													"value": "start"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "apiEntity",
+			"value": ""
+		},
+		{
+			"key": "v4_sync_api_add_properties",
+			"value": ""
+		}
+	]
+}
