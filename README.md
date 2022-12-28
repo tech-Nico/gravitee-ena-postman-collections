@@ -19,4 +19,6 @@ In order to properly run these collections, you'll need 4 variables to be set :
 - management_password (ex: xxxxxxxxx )
 - gateway_host (ex: http://localhost:8082)
 
-We are always keen to discuss your feedbacks, ideas around this huge topic of Event-Native API Management, feel free to reach to us.
+## Can I send feedback to you?
+
+We are always keen to hear from you, especially on the huge topic of event-native API management. Please [contact us](https://www.gravitee.io/contact-us) if you have any feedback!
