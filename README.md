@@ -11,7 +11,7 @@ In these collections, you will find :
 - an API Management collection : to discover all the new use cases (such as Websocket, SSE, Webhook, Kafka, MQTT5) and how to create APIs (sync & Async) using the new v4 M-API and the nex v4 api_definition.
 
 
-## How to run these collections ? 
+## How do I run these collections? 
 
 In order to properly run these collections, you will need to set 4 variables:
 - management_host (ex: http://localhost:8083)
