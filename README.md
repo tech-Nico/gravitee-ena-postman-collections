@@ -4,7 +4,7 @@
 
 Gravitee is building a new Event-Native APIM in order to fully support Sync & Async APIs. We've been releasing first capabilities (link to doc) based on the v4 api_definition and management API. With an API first approach, these new capabilities doesn't come yet with a UI so we are sharing these collections in order to help our users discover this new beta capabilities.
 
-## What to discover in these collections ? 
+## What is in these collections? 
 
 In these collections, you will find : 
 - an environment collection : to reference your gateway, M-API, credentials etc..
