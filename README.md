@@ -13,7 +13,7 @@ In these collections, you will find :
 
 ## How to run these collections ? 
 
-In order to properly run these collections, you'll need 4 variables to be set :
+In order to properly run these collections, you will need to set 4 variables:
 - management_host (ex: http://localhost:8083)
 - management_username (ex: admin)
 - management_password (ex: xxxxxxxxx )
