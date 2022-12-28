@@ -8,7 +8,7 @@ Gravitee is building a new event-native APIM that fully supports both synchronou
 
 In these collections, you will find : 
 - an environment collection: to reference your gateway, management API, credentials, etc.
-- an API Management collection : to discover all the new use cases (such as Websocket, SSE, Webhook, Kafka, MQTT5) and how to create APIs (sync & Async) using the new v4 M-API and the nex v4 api_definition.
+- an API Management collection: to discover all the new use cases (such as Websocket, SSE, Webhook, Kafka, MQTT5) and how to create APIs (synchronous and synchronous) using the new v4 management API  and the next v4 API definition.
 
 
 ## How do I run these collections? 
