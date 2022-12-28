@@ -1,6 +1,6 @@
 # APIM Postman collection
 
-## Why these collections ? 
+## Why these collections? 
 
 Gravitee is building a new Event-Native APIM in order to fully support Sync & Async APIs. We've been releasing first capabilities (link to doc) based on the v4 api_definition and management API. With an API first approach, these new capabilities doesn't come yet with a UI so we are sharing these collections in order to help our users discover this new beta capabilities.
 
