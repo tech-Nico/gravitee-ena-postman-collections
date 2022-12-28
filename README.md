@@ -2,7 +2,7 @@
 
 ## Why these collections? 
 
-Gravitee is building a new Event-Native APIM in order to fully support Sync & Async APIs. We've been releasing first capabilities (link to doc) based on the v4 api_definition and management API. With an API first approach, these new capabilities doesn't come yet with a UI so we are sharing these collections in order to help our users discover this new beta capabilities.
+Gravitee is building a new event-native APIM that fully supports both synchronous and asynchronous APIs. There is a [beta release based on the v4 API definition and management API](http://docs.gravitee.io/apim/3.x/event_native_apim_introduction.html). There isn't yet a GUI, so we are sharing these collections in order to help you discover the new functionality.
 
 ## What is in these collections? 
 
