@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "95b98431-5904-4a5a-bcdf-6811693ac72d",
+		"_postman_id": "968e3c74-f0ab-48ce-99b4-5aa6ca286a62",
 		"name": "V4 API Management",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20391457"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -2781,7 +2780,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Event Consumption - Webhook\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"message\",\n    \"description\": \"Event Consumption - Webhook\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default-group\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"kafka:9092\",\n                        \"consumer\" : {\n                            \"enabled\": true,\n                            \"autoOffsetReset\": \"earliest\",\n                            \"topics\" : [\"demo\"]\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
+									"raw": "{\n    \"name\": \"Event Consumption - Webhook\",\n    \"apiVersion\": \"1.0\",\n    \"definitionVersion\": \"4.0.0\",\n    \"type\": \"message\",\n    \"description\": \"Event Consumption - Webhook\",\n    \"listeners\": [\n        {\n            \"type\": \"subscription\",\n            \"entrypoints\": [\n                {\n                    \"type\": \"webhook\"\n                }\n            ]\n        }\n    ],\n    \"endpointGroups\": [\n        {\n            \"name\": \"default-group\",\n            \"type\": \"kafka\",\n            \"endpoints\": [\n                {\n                    \"name\": \"default\",\n                    \"type\": \"kafka\",\n                    \"weight\": 1,\n                    \"inheritConfiguration\": false,\n                    \"configuration\": {\n                        \"bootstrapServers\": \"localhost:9092\",\n                        \"consumer\" : {\n                            \"enabled\": true,\n                            \"autoOffsetReset\": \"earliest\",\n                            \"topics\" : [\"demo\"]\n                        }\n                    }\n                }\n            ]\n        }\n    ],\n    \"flows\": [\n        {\n            \"name\": \"\",\n            \"selectors\": [],\n            \"request\": [],\n            \"response\": [],\n            \"subscribe\": [],\n            \"publish\": [],\n            \"enabled\": true\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2848,7 +2847,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\":\"Subscription Plan\",\n    \"description\":\"Subscription Plan\",\n    \"characteristics\":[],\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
+									"raw": "{\n    \"name\": \"Subscription Plan\",\n    \"description\": \"Subscription Plan\",\n    \"characteristics\": [],\n    \"validation\": \"auto\",\n    \"security\": {\n        \"type\": \"subscription\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3142,7 +3141,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"entrypointConfiguration\": {\n            \"callbackUrl\": \"https://webhook.site/da3d3edc-c2d1-4c3e-a700-ed3e7073f5d5\",\n            \"headers\": [\n                {\n                    \"name\": \"demoHeader\",\n                    \"value\": \"my-value\"\n                },\n                {\n                    \"name\": \"anotherHeader\",\n                    \"value\": \"my-value2\"\n                }\n            ]\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3586,7 +3585,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"entrypointConfiguration\": {\n            \"callbackUrl\": \"https://webhook.site/da3d3edc-c2d1-4c3e-a700-ed3e7073f5d5\",\n            \"headers\": [\n                {\n                    \"name\": \"demoHeader\",\n                    \"value\": \"my-value\"\n                },\n                {\n                    \"name\": \"anotherHeader\",\n                    \"value\": \"my-value2\"\n                }\n            ]\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4028,7 +4027,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"application\": \"{{application}}\",\n    \"plan\": \"{{plan}}\",\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\"\n    }\n}",
+									"raw": "{\n    \"application\": \"{{application}}\",\n    \"plan\": \"{{plan}}\",\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"entrypointConfiguration\": {\n            \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4146,7 +4145,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"demoValue\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"anotherValue\"\n            }\n        ]\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"entrypointConfiguration\": {\n            \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n            \"headers\": [\n                {\n                    \"name\": \"demoHeader\",\n                    \"value\": \"demoValue\"\n                },\n                {\n                    \"name\": \"anotherHeader\",\n                    \"value\": \"anotherValue\"\n                }\n            ]\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4388,7 +4387,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"entrypointConfiguration\": {\n            \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n            \"headers\": [\n                {\n                    \"name\": \"demoHeader\",\n                    \"value\": \"my-value\"\n                },\n                {\n                    \"name\": \"anotherHeader\",\n                    \"value\": \"my-value2\"\n                }\n            ]\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4520,7 +4519,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"entrypointConfiguration\": {\n            \"callbackUrl\": \"https://webhook.site/f1c4ce69-a54e-4e3f-8ae0-9bfb4b26d70f\",\n            \"headers\": [\n                {\n                    \"name\": \"demoHeader\",\n                    \"value\": \"my-value\"\n                },\n                {\n                    \"name\": \"anotherHeader\",\n                    \"value\": \"my-value2\"\n                }\n            ]\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -5026,7 +5025,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    },\n    \"metadata\": {\n        \"feature\": \"demo\"\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"entrypointConfiguration\": {\n            \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n            \"headers\": [\n                {\n                    \"name\": \"demoHeader\",\n                    \"value\": \"my-value\"\n                },\n                {\n                    \"name\": \"anotherHeader\",\n                    \"value\": \"my-value2\"\n                }\n            ]\n        }\n    },\n    \"metadata\": {\n        \"feature\": \"demo\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -5155,7 +5154,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n        \"headers\": [\n            {\n                \"name\": \"demoHeader\",\n                \"value\": \"my-value\"\n            },\n            {\n                \"name\": \"anotherHeader\",\n                \"value\": \"my-value2\"\n            }\n        ]\n    },\n    \"metadata\": {\n        \"feature\": \"demo2\"\n    }\n}",
+									"raw": "{\n    \"configuration\": {\n        \"entrypointId\": \"webhook\",\n        \"entrypointConfiguration\": {\n            \"callbackUrl\": \"https://webhook.site/b27b358b-1fcc-4fd3-87b4-3dce109563a7\",\n            \"headers\": [\n                {\n                    \"name\": \"demoHeader\",\n                    \"value\": \"my-value\"\n                },\n                {\n                    \"name\": \"anotherHeader\",\n                    \"value\": \"my-value2\"\n                }\n            ]\n        }\n    },\n    \"metadata\": {\n        \"feature\": \"demo2\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
